@@ -21,14 +21,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install mlflow scikit-learn pandas
+          pip install mlflow scikit-learn pandas matplotlib
 
-      - name: Run MLflow Project
+      - name: Run Training Script
         run: |
-          mlflow run MLProject
+          # Gunakan python langsung daripada 'mlflow run' agar lebih mudah dikontrol di CI
+          # Pastikan tracking URI diarahkan ke lokal folder untuk CI ini
+          export MLFLOW_TRACKING_URI=sqlite:///mlflow.db
+          python train.py 
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: model-artifacts
-          path: mlruns
+          # Kita hanya mengambil folder mlruns yang dihasilkan
+          path: mlruns/
