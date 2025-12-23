@@ -11,31 +11,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
+      # 2. Setup Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
+      # 3. Install dependencies
       - name: Install dependencies
         run: |
           pip install mlflow scikit-learn pandas
-          
-      - name: Install Conda dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential
 
-      - name: Run training script directly
+      # 4. Run training and force MLflow local tracking
+      - name: Run MLflow Training
         run: |
           cd MLProject
+          export MLFLOW_TRACKING_URI=file:./mlruns
           python modelling.py
 
-      - name: Upload MLflow artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: model-artifacts
-          path: MLProject/mlruns
+      # 5. Commit mlruns to repository
+      - name: Commit mlruns folder
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
 
+          git add MLProject/mlruns || echo "No mlruns to add"
+
+          git commit -m "Add MLflow training artifacts (mlruns)" || echo "No changes to commit"
+
+          git push
