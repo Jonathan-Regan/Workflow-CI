@@ -25,8 +25,6 @@ jobs:
 
       - name: Run Training Script
         run: |
-          # Gunakan python langsung daripada 'mlflow run' agar lebih mudah dikontrol di CI
-          # Pastikan tracking URI diarahkan ke lokal folder untuk CI ini
           export MLFLOW_TRACKING_URI=sqlite:///mlflow.db
           python train.py 
 
@@ -34,5 +32,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: model-artifacts
-          # Kita hanya mengambil folder mlruns yang dihasilkan
           path: mlruns/
