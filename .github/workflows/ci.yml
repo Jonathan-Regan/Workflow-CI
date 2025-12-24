@@ -30,10 +30,9 @@ jobs:
 
       # 4. Run training as MLflow Project
       - name: Run MLflow Project
+        working-directory: MLProject
         run: |
-          cd MLProject
-          export MLFLOW_TRACKING_URI=file:./mlruns
-          mlflow run .
+          mlflow run . --env-manager=local -P data_path=heart_preprocessing/heart_preprocessed.csv
 
       # 5. Commit mlruns to repository
       - name: Commit mlruns folder
