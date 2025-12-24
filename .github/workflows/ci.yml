@@ -15,7 +15,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: true
           fetch-depth: 0
 
       # 2. Setup Python
@@ -24,17 +23,17 @@ jobs:
         with:
           python-version: '3.9'
 
-      # 3. Install dependencies
-      - name: Install dependencies
+      # 3. Install MLflow
+      - name: Install MLflow
         run: |
-          pip install mlflow scikit-learn pandas
+          pip install mlflow
 
-      # 4. Run training and force MLflow local tracking
-      - name: Run MLflow Training
+      # 4. Run training as MLflow Project
+      - name: Run MLflow Project
         run: |
           cd MLProject
           export MLFLOW_TRACKING_URI=file:./mlruns
-          python modelling.py
+          mlflow run .
 
       # 5. Commit mlruns to repository
       - name: Commit mlruns folder
@@ -43,7 +42,5 @@ jobs:
           git config --global user.email "github-actions@github.com"
 
           git add MLProject/mlruns || echo "No mlruns to add"
-
-          git commit -m "Add MLflow training artifacts (mlruns)" || echo "No changes to commit"
-
+          git commit -m "Add MLflow Project training artifacts" || echo "No changes to commit"
           git push
