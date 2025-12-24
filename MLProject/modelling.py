@@ -24,27 +24,24 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
-        model = LogisticRegression(max_iter=1000)
-        model.fit(X_train, y_train)
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X_train, y_train)
 
-        # Predict
-        y_pred = model.predict(X_test)
+    # Predict
+    y_pred = model.predict(X_test)
 
-        # Evaluasi manual untuk tampilan terminal
-        acc = accuracy_score(y_test, y_pred)
-        prec = precision_score(y_test, y_pred, zero_division=0)
-        rec = recall_score(y_test, y_pred, zero_division=0)
-        f1 = f1_score(y_test, y_pred, zero_division=0)
+    # Evaluasi manual untuk tampilan terminal
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred, zero_division=0)
+    rec = recall_score(y_test, y_pred, zero_division=0)
+    f1 = f1_score(y_test, y_pred, zero_division=0)
 
-        # Opsional: Log metrik test set secara eksplisit jika autolog hanya log data train
-        mlflow.log_metric("test_accuracy", acc)
-        mlflow.log_metric("test_f1", f1)
-
-        print(f"Accuracy: {acc:.4f}")
-        print(f"Precision: {prec:.4f}")
-        print(f"Recall: {rec:.4f}")
-        print(f"F1: {f1:.4f}")
+    print(f"Accuracy: {acc:.4f}")
+    print(f"Precision: {prec:.4f}")
+    print(f"Recall: {rec:.4f}")
+    print(f"F1: {f1:.4f}")
 
 if __name__ == "__main__":
 
     main()
+
