@@ -24,8 +24,6 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
-
-    with mlflow.start_run(run_name="LogisticRegression_NoTuning"):
         model = LogisticRegression(max_iter=1000)
         model.fit(X_train, y_train)
 
@@ -48,4 +46,5 @@ def main():
         print(f"F1: {f1:.4f}")
 
 if __name__ == "__main__":
+
     main()
